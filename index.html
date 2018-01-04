@@ -48,9 +48,9 @@
       </nav>
       <nav id="sub-nav">
         
-          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="Flux RSS"></a>
         
-        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+        <a id="nav-search-btn" class="nav-icon" title="Rechercher"></a>
       </nav>
       <div id="search-form-wrap">
         <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
@@ -60,6 +60,48 @@
 </header>
       <div class="outer">
         <section id="main">
+  
+    <article id="post-R-B-Tree" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/01/04/R-B-Tree/" class="article-date">
+  <time datetime="2018-01-04T15:28:58.594Z" itemprop="datePublished">2018-01-04</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h4 id="一、红黑树介绍"><a href="#一、红黑树介绍" class="headerlink" title="一、红黑树介绍"></a>一、红黑树介绍</h4><p>&emsp;&emsp;红黑树(Red-Black Tree, 简称RBTee)，是一种特殊的二叉查找树。它满足二叉查找树的特征： 任意一个节点所包含的键值，大于左孩子的键值，小于等于右孩子的键值。<br>&emsp;&emsp;顾名思义，红黑树的每个节点上具有一个表示颜色的属性，红色或者黑色。</p>
+<ul>
+<li><strong>红黑树的节点定义</strong></li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">public class RBTNode&lt;T extends Comparable&lt;T&gt;&gt; &#123;</span><br><span class="line">	boolean color;</span><br><span class="line">	T key;</span><br><span class="line">	RBTNode&lt;T&gt; left;</span><br><span class="line">	RBTNode&lt;T&gt; right;</span><br><span class="line">	RBTNode&lt;T&gt; parent;</span><br><span class="line">	</span><br><span class="line">	public RBTNode(boolean color, T key) &#123;</span><br><span class="line">		this.color = color;</span><br><span class="line">		this.key = key;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	public RBTNode(boolean color, T key, RBTNode&lt;T&gt; left, RBTNode&lt;T&gt; right,</span><br><span class="line">			RBTNode&lt;T&gt; parent) &#123;</span><br><span class="line">		super();</span><br><span class="line">		this.color = color;</span><br><span class="line">		this.key = key;</span><br><span class="line">		this.left = left;</span><br><span class="line">		this.right = right;</span><br><span class="line">		this.parent = parent;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li><strong>红黑树的特征</strong><br>必须满足以下特征的二叉查找树才是红黑树。<br>&emsp;&emsp;(1) 每个节点或者是红色，或者是黑色<br>&emsp;&emsp;(2) 根节点一定是黑色<br>&emsp;&emsp;(3) 所有叶子节点都是黑色的。【红黑树中的叶子节点也叫NIL节点，是指空的叶子节点】<br>&emsp;&emsp;(4) 如果一个节点是红色的，则它的子节点必须是黑色的。（任何两个父子节点不可能同时为红色）<br>&emsp;&emsp;(5) 任意节点到其所有分支叶子节点的简单路径上的黑色节点个数相同。（该属性保证红黑树始终是一颗接近平衡的二叉树）</li>
+</ul>
+<h4 id="二、红黑树的基本操作（左旋和右旋）"><a href="#二、红黑树的基本操作（左旋和右旋）" class="headerlink" title="二、红黑树的基本操作（左旋和右旋）"></a>二、红黑树的基本操作（左旋和右旋）</h4><ul>
+<li><strong>左旋</strong><br><img src="url" alt="左旋示意图"><br>代码实现：</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line">/* </span><br><span class="line">	 * 对红黑树的节点(x)进行左旋转</span><br><span class="line">	 * 左旋示意图(对节点x进行左旋)：</span><br><span class="line">	 *      px                           px</span><br><span class="line">	 *     /                            /</span><br><span class="line">	 *    x                            y                </span><br><span class="line">	 *   / \      --(左旋)-.          / \       </span><br><span class="line">	 *  lx  y                        x  ry     </span><br><span class="line">	 *     / \                      / \</span><br><span class="line">	 *    ly ry                    lx ly  </span><br><span class="line">	 */</span><br><span class="line">	public void leftRotate(RBTNode&lt;T&gt; p)&#123;</span><br><span class="line">		RBTNode&lt;T&gt; parent = p.parent;	// 父节点</span><br><span class="line">		RBTNode&lt;T&gt; pRightSon = p.right; //右孩子</span><br><span class="line">		RBTNode&lt;T&gt; pRrigtGrandLeftSon = pRightSon.left;//右孩子的左孩子</span><br><span class="line">		</span><br><span class="line">		pRightSon.parent = parent;</span><br><span class="line">		if(parent != null)&#123;</span><br><span class="line">			if(p == parent.left)&#123;</span><br><span class="line">				parent.left = pRightSon;</span><br><span class="line">			&#125;else if(p == parent.right)&#123;</span><br><span class="line">				parent.right = pRightSon;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;else &#123;</span><br><span class="line">			this.mRoot = pRightSon;</span><br><span class="line">		&#125;</span><br><span class="line">		</span><br><span class="line">		pRightSon.left = p;</span><br><span class="line">		p.parent = pRightSon;</span><br><span class="line">		</span><br><span class="line">		p.right = pRrigtGrandLeftSon;</span><br><span class="line">		if(pRrigtGrandLeftSon != null)&#123;</span><br><span class="line">			pRrigtGrandLeftSon.parent = p;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li><strong>右旋</strong><br><img src="url" alt="右旋示意图"><br>代码实现：</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line">/* </span><br><span class="line">	 * 对红黑树的节点(y)进行右旋转</span><br><span class="line">	 *</span><br><span class="line">	 * 右旋示意图(对节点y进行右旋)：</span><br><span class="line">	 *            py                             py</span><br><span class="line">	 *           /                              /</span><br><span class="line">	 *          y                              x                  </span><br><span class="line">	 *         /  \      --(右旋)-.            /  \                     </span><br><span class="line">	 *        x   ry                         lx  y  </span><br><span class="line">	 *       / \                                / \                   </span><br><span class="line">	 *      lx  rx                             rx  ry</span><br><span class="line">	 * </span><br><span class="line">	 */</span><br><span class="line">	public void rightRotate(RBTNode&lt;T&gt; p)&#123;</span><br><span class="line">		RBTNode&lt;T&gt; parent = p.parent;	//父节点</span><br><span class="line">		RBTNode&lt;T&gt; pLeftSon = p.left;	// 左节点</span><br><span class="line">		RBTNode&lt;T&gt; pleftGrandRightSon = pLeftSon.right; // 左孙，即左节点的右节点</span><br><span class="line">		</span><br><span class="line">		pLeftSon.parent = parent;</span><br><span class="line">		if(parent != null)&#123; //判断旋转的节点是否有父节点</span><br><span class="line">			if(p == parent.left)&#123;</span><br><span class="line">				parent.left = pLeftSon;</span><br><span class="line">			&#125;else if(p == parent.right)&#123;</span><br><span class="line">				parent.right = pLeftSon;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;else &#123;</span><br><span class="line">			this.mRoot = pLeftSon;</span><br><span class="line">		&#125;</span><br><span class="line">		</span><br><span class="line">		pLeftSon.right = p;</span><br><span class="line">		p.parent = pLeftSon;</span><br><span class="line">		</span><br><span class="line">		p.left = pleftGrandRightSon;</span><br><span class="line">		if(pleftGrandRightSon != null)&#123;</span><br><span class="line">			pleftGrandRightSon.parent = p;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="三、添加节点"><a href="#三、添加节点" class="headerlink" title="三、添加节点"></a>三、添加节点</h4><h4 id="四、删除节点"><a href="#四、删除节点" class="headerlink" title="四、删除节点"></a>四、删除节点</h4><h4 id="五、测试Demo"><a href="#五、测试Demo" class="headerlink" title="五、测试Demo"></a>五、测试Demo</h4>
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2018/01/04/R-B-Tree/" data-id="cjc0nf1z20000xkge0gacx7uu" class="article-share-link">Partager</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
   
     <article id="post-stack-data-structure" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
@@ -134,7 +176,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2017/12/04/stack-data-structure/" data-id="cjat4joxk0002zsgex80oidzg" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2017/12/04/stack-data-structure/" data-id="cjc0nf1zc0002xkgexwmg886e" class="article-share-link">Partager</a>
       
       
     </footer>
@@ -171,7 +213,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2017/11/08/My-first-post/" data-id="cjat4jow50000zsge1wq8kzl9" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2017/11/08/My-first-post/" data-id="cjc0nf1z80001xkgeknqybdyq" class="article-share-link">Partager</a>
       
       
     </footer>
@@ -216,7 +258,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2017/11/08/hello-world/" data-id="cjat4jowh0001zsged05m9fyu" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2017/11/08/hello-world/" data-id="cjc0nf1zd0003xkge64weq32g" class="article-share-link">Partager</a>
       
       
     </footer>
@@ -243,7 +285,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Archives</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">December 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">November 2017</a></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">January 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">December 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">November 2017</a></li></ul>
     </div>
   </div>
 
@@ -251,9 +293,13 @@
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">Recent Posts</h3>
+    <h3 class="widget-title">Articles récents</h3>
     <div class="widget">
       <ul>
+        
+          <li>
+            <a href="/2018/01/04/R-B-Tree/">(no title)</a>
+          </li>
         
           <li>
             <a href="/2017/12/04/stack-data-structure/">stack data structure</a>
@@ -279,8 +325,8 @@
   
   <div class="outer">
     <div id="footer-info" class="inner">
-      &copy; 2017 John Doe<br>
-      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+      &copy; 2018 John Doe<br>
+      Propulsé by <a href="http://hexo.io/" target="_blank">Hexo</a>
     </div>
   </div>
 </footer>
